@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberClass: информационная безопасность</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <header class="bg-white border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 class="text-xl font-bold">CyberClass</h1>
+        <p class="text-sm text-slate-500">Тренажёр по информационной безопасности</p>
+      </div>
+      <nav class="flex gap-2 text-sm">
+        <button data-page="home" class="nav-btn px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50">Главная</button>
+        <button data-page="trainer" class="nav-btn px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50">Тренажёр</button>
+        <button data-page="tips" class="nav-btn px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50">Советы</button>
+        <button data-page="handbook" class="nav-btn px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50">Справочник</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-5 py-8">
+
+    <!-- Главная -->
+    <section id="home" class="page">
+      <div class="bg-white rounded-xl border border-slate-200 p-8">
+        <h2 class="text-3xl font-bold">Безопасность в повседневной работе</h2>
+        <p class="mt-4 text-slate-600 leading-relaxed">
+          CyberClass помогает проверить знания по защите информации: от паролей и фишинга до моделей угроз, криптографии и реагирования на инциденты. Часть заданий требует выбрать вариант, а часть: ввести ответ самостоятельно. После каждого ответа показывается разбор и тема из справочника.
+        </p>
+        <div class="mt-6 grid sm:grid-cols-3 gap-4 text-center">
+          <div class="bg-slate-50 rounded-lg p-4"><div class="text-2xl font-bold" id="homeCount">0</div><div class="text-sm text-slate-500">заданий</div></div>
+          <div class="bg-slate-50 rounded-lg p-4"><div class="text-2xl font-bold">3</div><div class="text-sm text-slate-500">уровня сложности</div></div>
+          <div class="bg-slate-50 rounded-lg p-4"><div class="text-2xl font-bold" id="homeBest">0%</div><div class="text-sm text-slate-500">лучший результат</div></div>
+        </div>
+        <button data-page="trainer" class="nav-btn mt-6 px-5 py-3 rounded-lg bg-slate-800 text-white hover:bg-slate-700">Начать тренировку</button>
+      </div>
+    </section>
+
+    <!-- Тренажёр -->
+    <section id="trainer" class="page hidden">
+      <div id="levelPanel" class="grid sm:grid-cols-3 gap-4">
+        <button data-level="easy" class="level-btn bg-white rounded-xl border border-slate-200 p-5 text-left hover:border-slate-400">
+          <div class="text-sm text-emerald-700 font-semibold">Уровень 1</div>
+          <div class="font-bold text-lg mt-1">Базовый</div>
+          <p class="text-sm text-slate-500 mt-1">Пароли, фишинг, обновления, ловушки в формулировках.</p>
+        </button>
+        <button data-level="medium" class="level-btn bg-white rounded-xl border border-slate-200 p-5 text-left hover:border-slate-400">
+          <div class="text-sm text-amber-700 font-semibold">Уровень 2</div>
+          <div class="font-bold text-lg mt-1">Продвинутый</div>
+          <p class="text-sm text-slate-500 mt-1">Сети, социальная инженерия, журналы, резервные копии.</p>
+        </button>
+        <button data-level="hard" class="level-btn bg-white rounded-xl border border-slate-200 p-5 text-left hover:border-slate-400">
+          <div class="text-sm text-red-700 font-semibold">Уровень 3</div>
+          <div class="font-bold text-lg mt-1">Экспертный</div>
+          <p class="text-sm text-slate-500 mt-1">Хеши, режимы шифрования, PKI, оценка риска, расчёты.</p>
+        </button>
+      </div>
+
+      <div id="quizArea" class="hidden">
+        <div class="flex justify-between items-center text-sm text-slate-500 mb-3">
+          <span id="questionMeta"></span>
+          <span>Время: <b id="timer" class="text-slate-800">01:00</b></span>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 p-6">
+          <span id="typeBadge" class="inline-block text-xs px-2 py-1 rounded bg-slate-100 text-slate-600"></span>
+          <h3 id="question" class="text-xl font-semibold leading-snug mt-3"></h3>
+          <div id="options" class="mt-6 grid gap-3"></div>
+          <div id="textAnswer" class="hidden mt-6">
+            <label for="answerInput" class="block text-sm text-slate-500 mb-2">Твой ответ</label>
+            <div class="flex flex-wrap gap-3">
+              <input id="answerInput" type="text" autocomplete="off" placeholder="Введи ответ" class="flex-1 min-w-60 px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:border-slate-600" />
+              <button id="checkBtn" class="px-5 py-3 rounded-lg border border-slate-800 text-slate-800 hover:bg-slate-50">Проверить</button>
+            </div>
+          </div>
+          <div id="explanation" class="hidden mt-6 p-4 rounded-lg bg-slate-50 border border-slate-200">
+            <p id="verdict" class="font-semibold"></p>
+            <p id="answerNote" class="mt-2 text-slate-700"></p>
+            <p id="explanationText" class="mt-2 text-slate-700 leading-relaxed"></p>
+            <p id="topicText" class="mt-2 text-sm text-slate-500"></p>
+          </div>
+          <div class="mt-6 flex flex-wrap justify-between gap-3">
+            <button id="hintBtn" class="px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50">Подсказка</button>
+            <button id="nextBtn" disabled class="px-5 py-2 rounded-lg bg-slate-800 text-white disabled:opacity-40">Далее</button>
+          </div>
+          <p id="hintText" class="hidden mt-4 text-sm text-amber-700"></p>
+        </div>
+      </div>
+
+      <div id="resultBox" class="hidden bg-white rounded-xl border border-slate-200 p-8 text-center">
+        <p class="text-slate-500">Результат</p>
+        <h3 id="resultTitle" class="text-3xl font-bold mt-2"></h3>
+        <p id="resultText" class="mt-4 text-slate-600"></p>
+        <button id="retryBtn" class="mt-6 px-5 py-3 rounded-lg bg-slate-800 text-white hover:bg-slate-700">Выбрать другой уровень</button>
+      </div>
+    </section>
+
+    <!-- Советы -->
+    <section id="tips" class="page hidden">
+      <h2 class="text-3xl font-bold">Советы по безопасности</h2>
+      <div class="grid md:grid-cols-2 gap-4 mt-6">
+        <article class="bg-white rounded-xl border border-slate-200 p-5">
+          <h3 class="font-bold text-lg">Пароли</h3>
+          <p class="mt-2 text-slate-600 leading-relaxed">Используй менеджер паролей, уникальный пароль для каждого сервиса и двухфакторную аутентификацию. Код из SMS никому не сообщай.</p>
+        </article>
+        <article class="bg-white rounded-xl border border-slate-200 p-5">
+          <h3 class="font-bold text-lg">Фишинг</h3>
+          <p class="mt-2 text-slate-600 leading-relaxed">Проверяй адрес отправителя и домен сайта, а не только название. Срочность и угрозы часто используют, чтобы не дать время подумать. Заходи на сервис через закладку.</p>
+        </article>
+        <article class="bg-white rounded-xl border border-slate-200 p-5">
+          <h3 class="font-bold text-lg">Обновления</h3>
+          <p class="mt-2 text-slate-600 leading-relaxed">Обновления закрывают известные уязвимости. Устанавливай их через настройки системы и приложений.</p>
+        </article>
+        <article class="bg-white rounded-xl border border-slate-200 p-5">
+          <h3 class="font-bold text-lg">Инцидент</h3>
+          <p class="mt-2 text-slate-600 leading-relaxed">Если открыл подозрительную ссылку, отключи сеть, сохрани переписку и сразу сообщи ответственному человеку.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Справочник -->
+    <section id="handbook" class="page hidden">
+      <h2 class="text-3xl font-bold">Справочник</h2>
+      <p class="mt-3 text-slate-600">Понятия из учебной литературы по информационной безопасности и криптографии, изложенные кратко.</p>
+      <div class="mt-6 space-y-3">
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Конфиденциальность, целостность, доступность (CIA)</summary><p class="mt-3 text-slate-600 leading-relaxed">Базовая триада свойств защиты информации. Конфиденциальность означает доступ только для авторизованных субъектов, целостность гарантирует неизменность данных без санкции, доступность обеспечивает доступ к ресурсам в нужное время. Подмена суммы в платёжке без кражи данных нарушает целостность.</p></details>
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Хеширование паролей</summary><p class="mt-3 text-slate-600 leading-relaxed">Криптографическая хеш-функция должна быть стойкой к поиску прообраза и коллизий. Для паролей применяют медленные функции (bcrypt, scrypt, Argon2) с уникальной солью для каждого пользователя. Соль затрудняет использование радужных таблиц, а медленность увеличивает стоимость перебора.</p></details>
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Режимы блочного шифрования</summary><p class="mt-3 text-slate-600 leading-relaxed">Режим ECB шифрует каждый блок независимо. Одинаковые блоки открытого текста дают одинаковые блоки шифротекста, поэтому структура данных просвечивает. Режимы с цепочкой блоков и вектором инициализации (например, CBC или CTR с правильным nonce) лишены этого недостатка.</p></details>
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Симметричное и асимметричное шифрование</summary><p class="mt-3 text-slate-600 leading-relaxed">Симметричные алгоритмы (например, AES) быстры, но требуют безопасной передачи ключа. При попарном обмене между n участниками нужно n(n-1)/2 ключей. Асимметричные схемы (RSA, ECC) используют пару ключей и применяются для обмена симметричным ключом в гибридных схемах.</p></details>
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Инфраструктура открытых ключей (PKI)</summary><p class="mt-3 text-slate-600 leading-relaxed">Удостоверяющий центр подписывает сертификаты, связывая открытый ключ с владельцем. Доверие строится по цепочке сертификатов до доверенного корня. Самоподписанный сертификат не подтверждён доверенным центром, поэтому браузер предупреждает о нём.</p></details>
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Модель угроз и оценка риска</summary><p class="mt-3 text-slate-600 leading-relaxed">Модель угроз описывает нарушителя, его возможности и пути атак. Риск определяется вероятностью реализации угрозы и величиной ущерба. Ожидаемый годовой ущерб (ALE) равен вероятности в год, умноженной на ущерб от одного события. Уязвимость, угроза и риск не являются синонимами.</p></details>
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Принцип наименьших привилегий и Zero Trust</summary><p class="mt-3 text-slate-600 leading-relaxed">Пользователь получает только необходимые права. Модель Zero Trust проверяет каждый запрос отдельно и не доверяет субъекту только из-за его местоположения в сети.</p></details>
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Реагирование на инцидент</summary><p class="mt-3 text-slate-600 leading-relaxed">Этапы: подготовка, обнаружение, сдерживание, устранение последствий, восстановление и анализ причин. Журналы событий сохраняются до анализа, а не удаляются.</p></details>
+        <details class="bg-white rounded-xl border border-slate-200 p-4"><summary class="font-semibold cursor-pointer">Литература</summary><ul class="mt-3 list-disc pl-5 text-slate-600 space-y-1"><li>В. А. Галатенко, «Основы информационной безопасности».</li><li>У. Столлингс, «Криптография и защита сетей».</li><li>Н. А. Мельников, «Информационная безопасность и защита информации».</li></ul></details>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // type: 'choice' (варианты в a, правильный индекс c) или 'text' (ввод ответа, ключевые слова k, пример ответа d)
+    const LEVELS = {
+      easy: {
+        name: 'Базовый', time: 60,
+        questions: [
+          { type: 'choice', q: 'Пришло письмо от «банка»: карта временно заблокирована, подтвердите данные по ссылке. Отправитель пишет с адреса support@sber-bank-help.ru. Что важнее всего проверить?',
+            a: ['Есть ли в письме логотип и фирменные цвета банка', 'Совпадает ли домен отправителя и сайта с официальным адресом банка, а не только содержит его название', 'Грамотно ли написан текст письма'], c: 1,
+            e: 'Мошенники копируют оформление и подбирают домены, которые содержат название известной организации. Важен точный домен.', t: 'Фишинг, подделка доменов' },
+          { type: 'choice', q: 'Какое из утверждений о надёжных паролях является ложным?',
+            a: ['Длина пароля обычно важнее сложности символов', 'Пароль из длинной фразы может быть устойчивым', 'Одинаковый пароль для почты и банка допустим, если он длинный и сложный'], c: 2,
+            e: 'Даже сложный пароль становится опасным, если он используется в нескольких сервисах. Взлом одного сервиса открывает доступ к остальным.', t: 'Парольная политика' },
+          { type: 'choice', q: 'В кафе предлагают подключиться к Wi-Fi без пароля, и в браузере открывается страница входа в почту. Что разумнее всего?',
+            a: ['Войти, так как страница выглядит знакомо', 'Не вводить данные, отключиться от сети и заходить только через мобильный интернет или проверенное VPN-соединение', 'Ввести пароль и сразу сменить его'], c: 1,
+            e: 'Поддельная точка доступа может показывать фальшивые страницы входа. Ввод данных в таких условиях опасен даже при знакомом оформлении.', t: 'Сетевые угрозы, публичный Wi-Fi' },
+          { type: 'choice', q: 'Друг в мессенджере просит прислать код из SMS, потому что «ошибся номером». Что сделаешь?',
+            a: ['Отправлю код, ведь друг меня просит', 'Не отправлю и позвоню другу по известному номеру для проверки', 'Отправлю только первые три цифры'], c: 1,
+            e: 'Код подтверждения нельзя передавать никому, даже частично. Злоумышленники часто взламывают чужой аккаунт именно так.', t: 'Двухфакторная аутентификация' },
+          { type: 'choice', q: 'Что в первую очередь делает обновление системы с точки зрения безопасности?',
+            a: ['Добавляет новые функции, а исправления вторичны', 'Закрывает известные уязвимости, которые могут использоваться в атаках', 'Удаляет вирусы, поэтому антивирус больше не нужен'], c: 1,
+            e: 'Обновления часто содержат исправления уязвимостей. Антивирус при этом остаётся полезным, но не заменяет обновления.', t: 'Управление уязвимостями' },
+          { type: 'text', q: 'Как называется атака, при которой мошенник выдаёт себя за известный сервис, чтобы выманить пароль или код? Ответ одним словом.',
+            k: ['фишинг'], d: 'фишинг',
+            e: 'Фишинг использует поддельные письма, сайты или сообщения. Признаки: срочность, похожий домен, просьба ввести данные.', t: 'Фишинг, социальная инженерия' }
+        ]
+      },
+      medium: {
+        name: 'Продвинутый', time: 75,
+        questions: [
+          { type: 'choice', q: 'Коллега присылает файл с нового адреса и пишет: «Срочно открой, это от бухгалтерии, нужно до обеда». Лучший шаг?',
+            a: ['Открыть файл, ведь это коллега', 'Уточнить у коллеги по известному каналу связи, например по телефону из справочника', 'Переслать файл другим сотрудникам, чтобы они тоже увидели'], c: 1,
+            e: 'Смена адреса отправителя и срочность указывают на компрометацию или социальную инженерию. Проверка через заранее известный канал решает проблему.', t: 'Социальная инженерия' },
+          { type: 'choice', q: 'Какой вариант НЕ защищает трафик пользователя в публичной сети?',
+            a: ['Работа по HTTPS на всех сайтах', 'Подключение через VPN, которому доверяешь', 'Вход в интернет-банк по протоколу HTTP без шифрования'], c: 2,
+            e: 'HTTP передаёт данные открытым текстом, поэтому на промежуточных узлах их можно прочитать. HTTPS и VPN шифруют соединение.', t: 'TLS, VPN' },
+          { type: 'choice', q: 'В журнале видно 50 неудачных входов в учётную запись, затем успешный вход с того же адреса. Что это вероятнее всего?',
+            a: ['Пользователь три раза забыл пароль, потом вспомнил', 'Подбор пароля, который, вероятно, оказался успешным', 'Сбой работы журналирования'], c: 1,
+            e: 'Серия неудач с последующим успехом с того же адреса типична для подбора. Такой случай требует немедленной проверки учётной записи.', t: 'Журналы событий, анализ логов' },
+          { type: 'choice', q: 'Какое утверждение о менеджере паролей верно?',
+            a: ['Он делает все пароли одинаковыми для удобства', 'Главный пароль к нему должен быть надёжным и защищён двухфакторной аутентификацией', 'После установки риск взлома полностью исчезает'], c: 1,
+            e: 'Менеджер концентрирует доступ ко всем паролям, поэтому его защита критична. Полной гарантии он не даёт.', t: 'Управление учётными данными' },
+          { type: 'choice', q: 'Резервная копия лежит на том же диске, что и система, и обновляется каждый день. Что здесь наиболее уязвимо?',
+            a: ['Частота обновления копии', 'Общее место хранения: при поломке диска или шифровальщике пострадают и система, и копия', 'Размер копии'], c: 1,
+            e: 'Копия должна храниться отдельно от основных данных. Правило 3-2-1 предполагает хранение вне основного места.', t: 'Резервное копирование' },
+          { type: 'text', q: 'Как называется атака, при которой злоумышленник незаметно становится посредником и перехватывает трафик между двумя сторонами? Напиши термин по-английски или по-русски.',
+            k: ['man in the middle', 'mitm', 'посредник', 'человек посередине'], d: 'атака «человек посередине» (man-in-the-middle)',
+            e: 'В атаке MitM злоумышленник читает или подменяет данные между участниками. Защита: шифрование и проверка сертификатов.', t: 'Сетевые атаки, TLS' }
+        ]
+      },
+      hard: {
+        name: 'Экспертный', time: 90,
+        questions: [
+          { type: 'choice', q: 'Сервис хранит пароли как MD5-хеши с солью, одинаковой для всех пользователей. Что это даёт атакующему?',
+            a: ['Ничего, соль защищает от всех атак', 'Возможность составить одну таблицу предвычислений для всей базы сразу', 'Невозможность перебора'], c: 1,
+            e: 'Общая соль не уникальна для каждого пользователя, поэтому подготовленные таблицы применимы ко всей базе. Нужна уникальная соль и медленная функция вроде bcrypt, scrypt или Argon2.', t: 'Хеширование паролей, соль' },
+          { type: 'choice', q: 'Какое утверждение о хеш-функции верно?',
+            a: ['Хеш-функция обратима при наличии достаточного количества времени', 'Криптографическая хеш-функция должна затруднять поиск прообраза и коллизий', 'Одинаковый результат для разных входов говорит о хорошей функции'], c: 1,
+            e: 'Коллизии неизбежны по определению, но для стойкой функции их найти вычислительно трудно. Одинаковые выходы для разных входов указывают на слабость.', t: 'Криптографические хеш-функции' },
+          { type: 'choice', q: 'В симметричной системе участвуют 6 сотрудников, и каждая пара обменивается секретными сообщениями. Сколько различных ключей потребуется?',
+            a: ['6', '15', '36'], c: 1,
+            e: 'Для n участников при попарном обмене нужно n(n−1)/2 ключей. Для шести человек это 15. Поэтому на практике применяют распределение ключей через центр или асимметричные схемы.', t: 'Симметричное шифрование, управление ключами' },
+          { type: 'choice', q: 'Браузер предупреждает, что сертификат сайта самоподписанный. Что это означает на практике?',
+            a: ['Сайт точно взломан и содержит вредоносный код', 'Сертификат не подтверждён доверенным центром, поэтому личность сервера не проверена по цепочке доверия', 'Соединение вообще не шифруется'], c: 1,
+            e: 'При самоподписанном сертификате шифрование может сохраняться, но подлинность сервера не подтверждена. Это повод не вводить данные, а не доказательство атаки.', t: 'PKI, сертификаты' },
+          { type: 'choice', q: 'Администратор видит ночной вход из другой страны, после которого создан новый пользователь с правами администратора. Что НЕ относится к первым действиям?',
+            a: ['Изолировать или временно заблокировать скомпрометированную учётную запись', 'Сохранить журналы и снимки системы для расследования', 'Удалить журналы, чтобы освободить место и не пугать пользователей'], c: 2,
+            e: 'Удаление журналов уничтожает доказательства. Сначала сдерживание, затем сохранение данных и анализ.', t: 'Реагирование на инцидент' },
+          { type: 'text', q: 'Годовая вероятность утечки базы оценивается в 0,2, ущерб от одного события составит 300 000 рублей. Чему равен ожидаемый годовой ущерб (ALE)? Введи сумму в рублях.',
+            k: ['60000'], d: '60 000 рублей',
+            e: 'ALE = вероятность в год × ущерб от одного события = 0,2 × 300 000 = 60 000 рублей.', t: 'Оценка риска' },
+          { type: 'text', q: 'На каком этапе реагирования на инцидент скомпрометированную систему отключают от сети, чтобы ограничить распространение атаки? Ответ одним словом.',
+            k: ['сдерживан', 'локализац', 'изоляц'], d: 'сдерживание (локализация)',
+            e: 'Сдерживание не устраняет причину, но останавливает распространение. Сохранение журналов при этом обязательно, иначе расследование станет невозможным.', t: 'Реагирование на инцидент' }
+        ]
+      }
+    };
+
+    const state = { level: null, list: [], index: 0, score: 0, answered: false, timeLeft: 0, timer: null, order: [], correctPos: 0 };
+    const $ = id => document.getElementById(id);
+
+    $('homeCount').textContent = Object.values(LEVELS).reduce((s, l) => s + l.questions.length, 0);
+
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== id));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('bg-slate-800', b.dataset.page === id));
+      window.scrollTo({ top: 0 });
+    }
+    document.querySelectorAll('.nav-btn').forEach(b => b.addEventListener('click', () => showPage(b.dataset.page)));
+    document.querySelectorAll('.level-btn').forEach(b => b.addEventListener('click', () => startLevel(b.dataset.level)));
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    // Нормализация ответа: нижний регистр, ё → е, только буквы и цифры
+    function normalize(s) {
+      return s.toLowerCase().replace(/ё/g, 'е').replace(/[^a-zа-я0-9]/g, '');
+    }
+
+    function startLevel(level) {
+      state.level = level;
+      state.list = LEVELS[level].questions;
+      state.index = 0;
+      state.score = 0;
+      $('levelPanel').classList.add('hidden');
+      $('resultBox').classList.add('hidden');
+      $('quizArea').classList.remove('hidden');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      clearInterval(state.timer);
+      const item = state.list[state.index];
+      state.answered = false;
+      state.timeLeft = LEVELS[state.level].time;
+
+      $('questionMeta').textContent = `${LEVELS[state.level].name}, задание ${state.index + 1} из ${state.list.length}`;
+      $('typeBadge').textContent = item.type === 'text' ? 'Ввод ответа' : 'Выбор варианта';
+      $('question').textContent = item.q;
+      $('explanation').classList.add('hidden');
+      $('hintText').classList.add('hidden');
+      $('nextBtn').disabled = true;
+      $('nextBtn').textContent = state.index === state.list.length - 1 ? 'Завершить' : 'Далее';
+
+      const box = $('options');
+      box.innerHTML = '';
+
+      if (item.type === 'text') {
+        box.classList.add('hidden');
+        $('textAnswer').classList.remove('hidden');
+        const input = $('answerInput');
+        input.value = '';
+        input.disabled = false;
+        input.classList.remove('border-emerald-500', 'border-red-500', 'bg-emerald-50', 'bg-red-50');
+        $('checkBtn').disabled = false;
+        setTimeout(() => input.focus(), 0);
+      } else {
+        box.classList.remove('hidden');
+        $('textAnswer').classList.add('hidden');
+        state.order = shuffle(item.a.map((_, i) => i));
+        state.correctPos = state.order.indexOf(item.c);
+        state.order.forEach((orig, pos) => {
+          const b = document.createElement('button');
+          b.className = 'option text-left px-4 py-3 rounded-lg border border-slate-300 hover:bg-slate-50';
+          b.textContent = item.a[orig];
+          b.addEventListener('click', () => choose(pos));
+          box.appendChild(b);
+        });
+      }
+
+      updateTimer();
+      state.timer = setInterval(() => {
+        state.timeLeft--;
+        updateTimer();
+        if (state.timeLeft <= 0) {
+          clearInterval(state.timer);
+          if (!state.answered) {
+            if (item.type === 'text') reveal(false, 'Время вышло', '');
+            else choose(-1);
+          }
+        }
+      }, 1000);
+    }
+
+    function updateTimer() {
+      const m = String(Math.floor(state.timeLeft / 60)).padStart(2, '0');
+      const s = String(state.timeLeft % 60).padStart(2, '0');
+      $('timer').textContent = `${m}:${s}`;
+    }
+
+    // Общий показ результата
+    function reveal(isRight, verdictText, answerNote) {
+      state.answered = true;
+      clearInterval(state.timer);
+      const item = state.list[state.index];
+      if (isRight) state.score++;
+      $('verdict').textContent = verdictText;
+      $('answerNote').textContent = answerNote;
+      $('explanationText').textContent = item.e;
+      $('topicText').textContent = 'Тема в справочнике: ' + item.t;
+      $('explanation').classList.remove('hidden');
+      $('nextBtn').disabled = false;
+    }
+
+    function choose(pos) {
+      if (state.answered) return;
+      const item = state.list[state.index];
+      const buttons = document.querySelectorAll('#options .option');
+      buttons.forEach(b => b.disabled = true);
+      buttons[state.correctPos].classList.add('bg-emerald-50', 'border-emerald-500');
+      const right = pos === state.correctPos;
+      if (!right && pos >= 0) buttons[pos].classList.add('bg-red-50', 'border-red-500');
+      const verdict = right ? 'Верно' : (pos < 0 ? 'Время вышло' : 'Неверно');
+      reveal(right, verdict, '');
+    }
+
+    function checkText() {
+      if (state.answered) return;
+      const item = state.list[state.index];
+      const input = $('answerInput');
+      const value = normalize(input.value);
+      const right = value.length > 0 && item.k.some(k => value.includes(normalize(k)));
+      input.disabled = true;
+      $('checkBtn').disabled = true;
+      input.classList.add(right ? 'border-emerald-500' : 'border-red-500', right ? 'bg-emerald-50' : 'bg-red-50');
+      const note = right ? '' : 'Правильный ответ: ' + item.d;
+      reveal(right, right ? 'Верно' : 'Неверно', note);
+    }
+
+    $('checkBtn').addEventListener('click', checkText);
+    $('answerInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        if (state.answered) $('nextBtn').click();
+        else checkText();
+      }
+    });
+
+    $('hintBtn').addEventListener('click', () => {
+      if (state.answered) return;
+      const item = state.list[state.index];
+      const hint = item.type === 'text'
+        ? 'Подсказка: ответ связан с темой «' + item.t + '». Ответь коротко, одним словом или числом.'
+        : 'Подсказка: внимательно прочитай формулировку, особенно слова «НЕ», «чаще всего» и «вероятнее всего». Тема: «' + item.t + '».';
+      $('hintText').textContent = hint;
+      $('hintText').classList.remove('hidden');
+    });
+
+    $('nextBtn').addEventListener('click', () => {
+      state.index++;
+      if (state.index < state.list.length) renderQuestion();
+      else finish();
+    });
+
+    function finish() {
+      clearInterval(state.timer);
+      $('quizArea').classList.add('hidden');
+      $('resultBox').classList.remove('hidden');
+      const total = state.list.length;
+      const pct = Math.round(state.score / total * 100);
+      const best = Math.max(Number(localStorage.getItem('cyberclass_best') || 0), pct);
+      localStorage.setItem('cyberclass_best', best);
+      $('homeBest').textContent = best + '%';
+      $('resultTitle').textContent = `${state.score} из ${total} (${pct}%)`;
+      $('resultText').textContent = pct >= 80
+        ? 'Хороший результат. Можно переходить к более сложному уровню.'
+        : 'Перечитай разборы и соответствующие темы в справочнике, затем пройди уровень ещё раз.';
+    }
+
+    $('retryBtn').addEventListener('click', () => {
+      $('resultBox').classList.add('hidden');
+      $('levelPanel').classList.remove('hidden');
+    });
+
+    $('homeBest').textContent = (localStorage.getItem('cyberclass_best') || 0) + '%';
+  </script>
+</body>
+</html>
