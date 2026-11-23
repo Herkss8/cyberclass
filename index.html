@@ -25,7 +25,7 @@
 
   <main class="max-w-5xl mx-auto px-5 py-8">
 
-    <!-- Главная -->
+    < Главная >
     <section id="home" class="page">
       <div class="bg-white rounded-xl border border-slate-200 p-8">
         <h2 class="text-3xl font-bold">Безопасность в повседневной работе</h2>
@@ -41,7 +41,7 @@
       </div>
     </section>
 
-    <!-- Тренажёр -->
+    <Тренажёр >
     <section id="trainer" class="page hidden">
       <div id="levelPanel" class="grid sm:grid-cols-3 gap-4">
         <button data-level="easy" class="level-btn bg-white rounded-xl border border-slate-200 p-5 text-left hover:border-slate-400">
@@ -99,7 +99,7 @@
       </div>
     </section>
 
-    <!-- Советы -->
+    <Советы >
     <section id="tips" class="page hidden">
       <h2 class="text-3xl font-bold">Советы по безопасности</h2>
       <div class="grid md:grid-cols-2 gap-4 mt-6">
@@ -122,7 +122,7 @@
       </div>
     </section>
 
-    <!-- Справочник -->
+    <Справочник>
     <section id="handbook" class="page hidden">
       <h2 class="text-3xl font-bold">Справочник</h2>
       <p class="mt-3 text-slate-600">Понятия из учебной литературы по информационной безопасности и криптографии, изложенные кратко.</p>
@@ -141,7 +141,6 @@
   </main>
 
   <script>
-    // type: 'choice' (варианты в a, правильный индекс c) или 'text' (ввод ответа, ключевые слова k, пример ответа d)
     const LEVELS = {
       easy: {
         name: 'Базовый', time: 60,
@@ -190,7 +189,7 @@
         ]
       },
       hard: {
-        name: 'Экспертный', time: 90,
+        name: 'Экспертный',
         questions: [
           { type: 'choice', q: 'Ты заметил, что в письме от «банка» адрес отправителя отличается одной буквой от официального. Что это, скорее всего?',
             a: ['Опечатка в адресе банка', 'Подмена домена, которая используется для обмана', 'Особенность почтового сервиса'], c: 1,
@@ -235,8 +234,6 @@
       }
       return a;
     }
-
-    // Нормализация ответа: нижний регистр, ё → е, только буквы и цифры
     function normalize(s) {
       return s.toLowerCase().replace(/ё/g, 'е').replace(/[^a-zа-я0-9]/g, '');
     }
