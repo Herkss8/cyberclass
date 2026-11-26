@@ -480,7 +480,7 @@
       <div class="mt-6 bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
         <h3 class="text-xl font-bold text-portal-900">Достижения</h3>
         <div id="cabAchGrid" class="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
-        <a id="vkBox" href="https://t.me/addstickers/cyber205" target="_blank" rel="noopener" class="hidden mt-4 flex items-center gap-3 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900 hover:bg-sky-100"><span class="w-9 h-9 shrink-0 rounded-lg bg-[#229ED9] text-white font-extrabold flex items-center justify-center">TG</span><span><b>Стикерпак «Кодик» в Telegram</b> — он твой! Нажми, чтобы добавить.</span></a>
+        <a id="tgBox" href="https://t.me/addstickers/cyber205" target="_blank" rel="noopener" class="hidden mt-4 flex items-center gap-3 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900 hover:bg-sky-100"><span class="w-9 h-9 shrink-0 rounded-lg bg-[#229ED9] text-white font-extrabold flex items-center justify-center">TG</span><span><b>Стикерпак «Кодик» в Telegram</b> - он твой! Нажми, чтобы добавить.</span></a>
       </div>
 
       <div class="mt-6 bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
@@ -1394,7 +1394,7 @@ const MIDORI = {wave: KODIK[1], point: KODIK[3], think: KODIK[4], happy: KODIK[1
         if (!a.ok) d.children[1].classList.add('text-slate-500');
         grid.appendChild(d);
       });
-      $('vkBox').classList.toggle('hidden', !ach.find(a => a.id === 'hunter').ok);
+      $('tgBox').classList.toggle('hidden', !ach.find(a => a.id === 'hunter').ok);
       const box = $('cabProgress');
       box.innerHTML = '';
       Object.entries(GROUPS).forEach(([gk, g]) => {
