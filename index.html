@@ -2041,6 +2041,45 @@
       const img = new Image(); img.src='assets/certificate.png'; await img.decode();
       const c=document.createElement('canvas'); c.width=1536;c.height=1024;const ctx=c.getContext('2d');ctx.drawImage(img,0,0);ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#132f78';let size=66;do {ctx.font=`700 ${size--}px Arial`;} while(ctx.measureText(name).width>845 && size>30);ctx.fillText(name,1015,458,845);const a=document.createElement('a');a.download='CyberClass-certificate.png';a.href=c.toDataURL();a.click();
     };
+    
+const originalKodikTips = [...MASCOT_TIPS];
+let kodikTipRows = [];
+
+function refreshKodikTips() {
+  const group = state.group;
+  const tips = kodikTipRows
+    .filter(r => r.category === 'general' || r.category === group)
+    .map(r => r.tip);
+
+  MASCOT_TIPS.splice(
+    0,
+    MASCOT_TIPS.length,
+    ...(tips.length ? tips : originalKodikTips)
+  );
+}
+
+$('heroMascot').addEventListener(
+  'click', refreshKodikTips, true
+);
+
+fetch(
+  SUPABASE_URL + '/rest/v1/mascot_tips?select=tip,category&order=sort_order.asc,id.asc',
+  {
+    headers: { apikey: SUPABASE_KEY }
+  }
+)
+.then(r => {
+  if (!r.ok) throw new Error('Tips HTTP ' + r.status);
+  return r.json();
+})
+.then(rows => {
+  kodikTipRows = rows.filter(
+    r => typeof r.tip === 'string' && r.tip.trim()
+  );
+  refreshKodikTips();
+})
+.catch(e => console.warn('Using local tips:', e));
+
     initMascots();
     updateUserUI();
     loadQuestions();
