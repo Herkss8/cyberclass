@@ -1,4 +1,19 @@
 
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            portal: {
+              50:  '#eef6fd', 100: '#d9ebfa', 200: '#b3d6f3', 300: '#7fb9ea', 400: '#4a9be0',
+              500: '#1f7fd1', 600: '#0b67b8', 700: '#0a559a', 800: '#0b457c', 900: '#0a3158', 950: '#072341',
+            }
+          }
+        }
+      }
+    }
+  
+;
+
     // Каждая группа делится на темы. Вопрос относится к теме через поле `topic`.
     const GROUPS = {
       primary: {
@@ -717,6 +732,7 @@ const MIDORI = {wave: KODIK[1], point: KODIK[3], think: KODIK[4], happy: KODIK[1
       const prog = Object.values(myProgress);
       const eggs = loadEggs();
       const groupsDone = new Set(prog.map(p => p.group_key)).size;
+      const surveyDone = hasSurveyAchievement();
       const byGroupEggs = Math.max(0, ...EGG_GROUPS.map(g => eggsIn(eggs, g)));
       return [
         { id: 'first', icon: 'bolt', name: 'Первый шаг', desc: 'Пройти первую тему', ok: prog.length >= 1 },
@@ -726,7 +742,8 @@ const MIDORI = {wave: KODIK[1], point: KODIK[3], think: KODIK[4], happy: KODIK[1
         { id: 'groups', icon: 'compass', name: 'Универсал', desc: 'Пройти темы во всех четырёх группах', ok: groupsDone >= 4 },
         { id: 'topics', icon: 'cap', name: 'Цифровой гражданин', desc: 'Пройти все ' + TOPIC_TOTAL + ' тем', ok: prog.length >= TOPIC_TOTAL },
         { id: 'egg1', icon: 'search', name: 'Зоркий глаз', desc: 'Найти первого спрятанного Кодика', ok: eggs.length >= 1 },
-        { id: 'hunter', icon: 'trophy', name: 'Охотник за Кодиком', desc: 'Найти 5 Кодиков в одной группе. Награда: стикерпак в Telegram', ok: byGroupEggs >= 5 }
+        { id: 'hunter', icon: 'trophy', name: 'Охотник за Кодиком', desc: 'Найти 5 Кодиков в одной группе. Награда: стикерпак в Telegram', ok: byGroupEggs >= 5 },
+        { id: 'loyal-kodik', icon: 'trophy', name: 'Верный Кодик', desc: 'Пройти опрос об удобстве тренажёра', ok: surveyDone, secret: true }
       ];
     }
     function renderCabinet() {
@@ -742,7 +759,7 @@ const MIDORI = {wave: KODIK[1], point: KODIK[3], think: KODIK[4], happy: KODIK[1
       $('cabAchTotal').textContent = '/' + ach.length;
       const grid = $('cabAchGrid');
       grid.innerHTML = '';
-      ach.forEach(a => {
+      ach.filter(a => !a.secret || a.ok).forEach(a => {
         const d = document.createElement('div');
         d.className = 'rounded-xl border p-4 ' + (a.ok ? 'border-sky-200 bg-sky-50' : 'border-slate-100 bg-slate-50');
         d.innerHTML = '<div class="w-10 h-10 rounded-xl flex items-center justify-center text-white ' + (a.ok ? 'ico-g1 shadow-sm' : 'bg-slate-300') + '">' + ic(a.ok ? a.icon : 'lock', 'w-5 h-5') + '</div><div class="mt-2 font-semibold text-sm text-portal-900"></div><div class="mt-0.5 text-xs text-slate-500 leading-snug"></div>';
@@ -1727,6 +1744,9 @@ fetch(
       }
       $('adaptiveRetryBtn').textContent = weak.length ? 'Пройти тест на основе ошибок' : 'Закрепить знания: смешанный тест';
     }
+    function hasSurveyAchievement() {
+      try { const records = JSON.parse(localStorage.getItem('cc_adaptive_survey_' + (auth && auth.id ? auth.id : 'guest')) || '[]'); return (Array.isArray(records) ? records : [records]).some(r => r && Array.isArray(r.answers) && r.answers.length === 6 && r.answers.every(v => Number.isInteger(v) && v >= 1 && v <= 5)); } catch (_) { return false; }
+    }
     function adaptiveInitUI() {
       const resultCard = $('resultBox').querySelector('.result-bg');
       const breakdown = adaptiveMake('div', 'mt-6 p-5 rounded-xl border border-portal-100 bg-portal-50/50', '');
@@ -1785,7 +1805,8 @@ fetch(
         const answers = qs.map((_,i) => Number(form.elements['q'+i].value));
         if (answers.some(v => v < 1 || v > 5)) return;
         const key = 'cc_adaptive_survey_' + (auth && auth.id ? auth.id : 'guest');
-        try { const old = JSON.parse(localStorage.getItem(key) || '[]'); const records = Array.isArray(old) ? old : [old]; records.push({ date:new Date().toISOString(), answers, comment:input.value.trim().slice(0,500) }); localStorage.setItem(key, JSON.stringify(records)); msg.textContent='Спасибо! Ваши ответы сохранены в этом браузере.'; form.classList.add('hidden'); invite.textContent='Опрос пройден — посмотреть подтверждение'; }
+        const alreadyUnlocked = hasSurveyAchievement();
+        try { const old = JSON.parse(localStorage.getItem(key) || '[]'); const records = Array.isArray(old) ? old : [old]; records.push({ date:new Date().toISOString(), answers, comment:input.value.trim().slice(0,500) }); localStorage.setItem(key, JSON.stringify(records)); msg.textContent='Спасибо! Ваши ответы сохранены в этом браузере.'; form.classList.add('hidden'); invite.textContent='Опрос пройден — посмотреть подтверждение'; if (!alreadyUnlocked) { msg.textContent += ' 🏆 Открыто скрытое достижение «Верный Кодик»!'; renderCabinet(); launchFireworks(); } }
         catch(_) { msg.textContent='Не удалось сохранить ответы. Проверьте настройки браузера.'; }
       });
       info.append(form, surveyToggle, msg);
