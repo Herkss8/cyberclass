@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700&display=swap');
+
+/* ===== Палитра портала «Цифровой гражданин Югры» (job.admhmao.ru) =====
+   Взята со скриншота. Подогнать точно — заменить значения здесь,
+   весь файл подстроится автоматически. */
+:root {
+  --portal-blue: #0d5fc4;    /* ссылки, кнопки, активная вкладка */
+  --portal-navy: #16295c;    /* заголовки */
+  --portal-bg: #ffffff;      /* фон страницы */
+  --portal-light: #f2f6fb;   /* приглушённые подложки */
+  --portal-border: #e1e7f0;  /* тонкие рамки карточек */
+  --portal-text: #3d4657;    /* основной текст */
+  --portal-muted: #7a8494;   /* даты, вторичный текст */
+}
+
+body { font-family: 'PT Sans', Arial, sans-serif; color: var(--portal-text); background: var(--portal-bg); }
+.nav-link { position: relative; }
+.nav-link.active { color: var(--portal-navy); }
+.nav-link.active::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -2px;
+  height: 2px; background: var(--portal-blue); border-radius: 0;
+}
+.nav-link:hover { color: var(--portal-blue); }
+.level-card { transition: border-color 0.2s, box-shadow 0.2s; }
+.level-card:hover { border-color: var(--portal-blue); box-shadow: 0 4px 14px -8px rgba(13,95,196,0.35); }
+details summary::-webkit-details-marker { display: none; }
+details[open] summary { color: var(--portal-blue); }
+/* конфетти в государственном портале неуместно — канвас скрыт */
+#fireworks-canvas { display: none; }
+.stat-num { font-variant-numeric: tabular-nums; }
+
+/* ===== Плоские акценты без декоративных градиентов ===== */
+.brand-grad { background: var(--portal-blue); }
+.page-bg { background: var(--portal-bg); }
+.hero-bg { background: var(--portal-light); }
+.result-bg { background: #ffffff; }
+.grad-text { width: fit-content; color: var(--portal-navy); }
+.ico-g1, .ico-g2, .ico-g3, .ico-g4, .ico-g5 { background: var(--portal-blue); }
+/* основные кнопки */
+button.bg-portal-600 { background: var(--portal-blue); }
+button.bg-portal-600:not(:disabled):hover { background: var(--portal-navy); color: #fff; }
+.rank { display: inline-flex; width: 26px; height: 26px; align-items: center; justify-content: center; border-radius: 9999px; font-weight: 700; font-size: 13px; color: var(--portal-navy); }
+.rank-1 { background: var(--portal-blue); color: #fff; }
+.rank-2 { background: #5b9bd5; color: #fff; }
+.rank-3 { background: #dbe7f5; color: var(--portal-navy); }
+
+/* ===== Реплики маскота ===== */
+.bubble { --bb: #ffffff; position: relative; background: var(--bb); border: 1px solid var(--portal-border); border-radius: 8px; padding: 10px 16px; }
+.bubble::after { content: ''; position: absolute; width: 14px; height: 14px; background: var(--bb); transform: rotate(45deg); }
+.bubble-b::after { left: 50%; margin-left: -7px; bottom: -8px; border-right: 1px solid var(--portal-border); border-bottom: 1px solid var(--portal-border); }
+.bubble-l::after { left: -8px; top: 50%; margin-top: -7px; border-left: 1px solid var(--portal-border); border-bottom: 1px solid var(--portal-border); }
+/* свечение вокруг маскота отключено — под портальный стиль */
+.mascot-glow::before { display: none; }
+.mascot-glow > * { position: relative; z-index: 1; }
+.chip-bob { animation: m-bob 4.4s ease-in-out infinite; }
+
+/* ===== Маскот «Кодик» ===== */
+.mascot { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.mascot.is-float { animation: m-bob 3.6s ease-in-out infinite; }
+.mascot[data-mood="happy"] { animation: m-hop .7s ease-out 1; }
+.mascot[data-mood="oops"] { animation: m-shake .5s ease-in-out 1; }
+@keyframes m-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes m-hop { 0% { transform: translateY(0); } 30% { transform: translateY(-22px); } 60% { transform: translateY(0); } 80% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+@keyframes m-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(3px); } }
+@keyframes chip-pop { 0% { transform: scale(.4); } 60% { transform: scale(1.35); } 100% { transform: scale(1); } }
+
+/* ===== Лампочки прогресса ===== */
+.lamp { width: 26px; height: 26px; color: #cbd5e1; transition: color .25s, filter .25s; }
+.lamp.now { color: #5b9bd5; }
+.lamp.ok { color: #3fae49; filter: drop-shadow(0 0 7px rgba(63,174,73,.8)); animation: chip-pop .45s ease-out; }
+.lamp.bad { color: #8aa4bd; filter: none; animation: chip-pop .45s ease-out; }
+
+/* ===== Спрятанные Кодики ===== */
+#quizEggs { position: absolute; inset: 0; pointer-events: none; z-index: 40; overflow: visible; }
+.midori-egg { pointer-events: auto; position: absolute; width: 72px; height: 72px; object-fit: contain; cursor: pointer; opacity: .5; transition: opacity .2s, transform .2s; touch-action: manipulation; filter: drop-shadow(0 2px 7px rgba(13,95,196,.5)); }
+.midori-egg:hover { opacity: 1; transform: scale(1.18); }
+.midori-egg:focus-visible { opacity: 1; outline: 2px solid var(--portal-blue); border-radius: 50%; }
+.midori-egg.found { opacity: 0; pointer-events: none; transform: scale(1.5); }
+
+/* ===== Новые типы заданий (зелёный/красный — только как «верно/неверно») ===== */
+.pwd-card, .sort-card { cursor: pointer; user-select: none; transition: .15s; }
+.pwd-card.mark-good { outline: 2px solid #10b981; background: #ecfdf5; }
+.pwd-card.mark-bad { outline: 2px solid #f43f5e; background: #fff1f2; }
+.sort-card.selected { outline: 2px solid var(--portal-blue); background: var(--portal-light); }
+.sort-card.used { opacity: .35; pointer-events: none; }
+
+/* ===== Футер: отменить градиентную подложку из Tailwind ===== */
+footer { background-image: none !important; background-color: #ffffff !important; border-top: 1px solid var(--portal-border) !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot, .lamp, .chip-bob { animation: none !important; }
+}
