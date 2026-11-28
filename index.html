@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CyberClass - цифровая безопасность</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <link rel="stylesheet" href="style.css">
+  <script src="JavaScript/tailwind-config.js"></script>
+  <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body class="bg-white text-slate-800 min-h-screen page-bg">
 
@@ -310,13 +310,37 @@
           <button id="admNew" class="px-4 py-2 rounded-xl bg-portal-600 text-white text-sm font-medium hover:bg-portal-700">+ Новый вопрос</button>
         </div>
       </div>
-      <div class="bg-white rounded-2xl border border-slate-100 p-6 mb-4 shadow-sm"><button id="attemptBtn" class="px-4 py-2 rounded-xl border border-portal-200 bg-white text-portal-700 text-sm font-medium hover:bg-portal-50">Показать историю прохождений</button><pre id="attemptList" class="whitespace-pre-wrap text-sm mt-3"></pre></div><p id="admMsg" class="hidden mb-4 text-sm rounded-lg px-3 py-2 border" role="status"></p>
+      <div class="bg-white rounded-2xl border border-slate-100 p-6 mb-4 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div><h3 class="text-xl font-bold text-portal-900">История прохождений</h3><p class="text-sm text-slate-500 mt-1">Результаты, ответы и ошибки пользователей тренажёра.</p></div>
+          <button id="attemptBtn" type="button" class="px-4 py-2 rounded-xl border border-portal-200 bg-white text-portal-700 text-sm font-medium hover:bg-portal-50 disabled:opacity-50">Показать / обновить историю</button>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-4 mb-2">
+            <button id="attemptExportAll" type="button" disabled class="px-4 py-2 rounded-xl bg-portal-600 text-white text-sm font-medium hover:bg-portal-700 disabled:opacity-50">Выгрузить результаты всех пользователей за всё время (Excel)</button>
+            <button id="attemptExportWeek" type="button" disabled class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 disabled:opacity-50">Выгрузить результаты всех пользователей за последние 7 дней (Excel)</button>
+          </div>
+        <p id="attemptMessage" role="status" class="text-sm text-slate-600 mb-2"></p>
+        <div id="attemptPanel" class="hidden mt-4">
+          <div class="flex flex-wrap gap-3 mb-4">
+            <label class="grid gap-1 text-sm text-slate-600 flex-1 min-w-[12rem]">Пользователь<select id="attemptUser" class="px-3 py-2 rounded-xl border border-slate-200 bg-white"><option value="">Все пользователи</option></select></label>
+            <label class="grid gap-1 text-sm text-slate-600">Период<select id="attemptPeriod" class="px-3 py-2 rounded-xl border border-slate-200 bg-white"><option value="all">За всё время</option><option value="week">Последние 7 дней</option></select></label>
+            <label class="grid gap-1 text-sm text-slate-600 flex-1 min-w-[10rem]">Поиск<input id="attemptSearch" type="search" placeholder="Ник или почта" class="px-3 py-2 rounded-xl border border-slate-200"/></label>
+          </div>
+          <p id="attemptSummary" class="text-sm font-medium text-portal-800 mb-3"></p>
+          <div id="attemptList" class="grid gap-3"></div>
+        </div>
+      </div><p id="admMsg" class="hidden mb-4 text-sm rounded-lg px-3 py-2 border" role="status"></p>
 
       <div id="admList" class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
         <div class="flex flex-wrap gap-3 mb-4">
           <select id="admFGroup" class="px-3 py-2 rounded-xl border border-slate-200 text-sm"></select>
           <select id="admFTopic" class="px-3 py-2 rounded-xl border border-slate-200 text-sm"></select>
           <input id="admSearch" type="search" placeholder="Поиск по тексту" class="flex-1 min-w-[10rem] px-3 py-2 rounded-xl border border-slate-200 text-sm"/>
+        </div>
+        <div class="flex flex-wrap gap-3 items-center mb-4 text-sm">
+          <label class="flex items-center gap-2 text-slate-600"><input id="admLengthOnly" type="checkbox" class="rounded border-slate-300"/> Только вопросы с подсказкой по длине</label>
+          <button id="admExportQuestions" type="button" class="px-3 py-2 rounded-xl border border-portal-200 text-portal-700 hover:bg-portal-50 disabled:opacity-50">Выгрузить все вопросы (JSON)</button>
+          <p id="admLengthCount" class="w-full text-xs text-slate-500"></p>
         </div>
         <div id="admQList" class="grid gap-3"></div>
       </div>
@@ -337,6 +361,7 @@
           <div data-ft="choice" class="grid gap-3">
             <label class="grid gap-1 text-slate-600">Варианты ответа (каждый с новой строки, минимум 2)<textarea id="fChoices" rows="4" class="px-3 py-2 rounded-xl border border-slate-200"></textarea></label>
             <label class="grid gap-1 text-slate-600">Номер верного варианта (считая с 1)<input id="fCorrect" type="number" min="1" value="1" class="px-3 py-2 rounded-xl border border-slate-200 w-28"/></label>
+            <p id="fLengthNotice" class="text-xs text-slate-500" aria-live="polite"></p>
           </div>
           <div data-ft="text" class="hidden grid gap-3">
             <label class="grid gap-1 text-slate-600">Допустимые ответы (через запятую)<input id="fKeys" class="px-3 py-2 rounded-xl border border-slate-200"/></label>
@@ -545,6 +570,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=20261127-3"></script>
+  <script src="JavaScript/script.js?v=20261128-direct-export-1"></script>
 </body>
 </html>
