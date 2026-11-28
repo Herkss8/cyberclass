@@ -27,7 +27,7 @@ body {
 .level-card:hover { border-color: var(--portal-blue); box-shadow: 0 4px 14px -8px rgba(13,95,196,0.35); }
 details summary::-webkit-details-marker { display: none; }
 details[open] summary { color: var(--portal-blue); }
-/* конфетти в государственном портале неуместно — канвас скрыт */
+
 #fireworks-canvas { display: none; }
 .stat-num { font-variant-numeric: tabular-nums; }
 
