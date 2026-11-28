@@ -1,7 +1,3 @@
-/* ===== Палитра портала «Цифровой гражданин Югры» (job.admhmao.ru) =====
-   Значения взяты из расчётных стилей портала (Bootstrap --bs-*):
-   тело #376296, фон #fff, шрифт Verdana, 16px/1.5/400.
-   Подгоняется в одном месте. */
 :root {
   --portal-blue: #0d5fc4;    /* ссылки, кнопки, активная вкладка */
   --portal-navy: #16295c;    /* заголовки */
@@ -12,7 +8,6 @@
   --portal-muted: #7a8494;   /* даты, вторичный текст */
 }
 
-/* Портал использует системный Verdana — веб-шрифт не подключаем. */
 body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 16px;
@@ -36,7 +31,6 @@ details[open] summary { color: var(--portal-blue); }
 #fireworks-canvas { display: none; }
 .stat-num { font-variant-numeric: tabular-nums; }
 
-/* ===== Плоские акценты без декоративных градиентов ===== */
 .brand-grad { background: var(--portal-blue); }
 .page-bg { background: var(--portal-bg); }
 .hero-bg { background: var(--portal-light); }
@@ -50,7 +44,6 @@ button.bg-portal-600:not(:disabled):hover { background: var(--portal-navy); colo
 .rank-2 { background: #5b9bd5; color: #fff; }
 .rank-3 { background: #dbe7f5; color: var(--portal-navy); }
 
-/* ===== Реплики маскота ===== */
 .bubble { --bb: #ffffff; position: relative; background: var(--bb); border: 1px solid var(--portal-border); border-radius: 8px; padding: 10px 16px; }
 .bubble::after { content: ''; position: absolute; width: 14px; height: 14px; background: var(--bb); transform: rotate(45deg); }
 .bubble-b::after { left: 50%; margin-left: -7px; bottom: -8px; border-right: 1px solid var(--portal-border); border-bottom: 1px solid var(--portal-border); }
@@ -59,7 +52,7 @@ button.bg-portal-600:not(:disabled):hover { background: var(--portal-navy); colo
 .mascot-glow > * { position: relative; z-index: 1; }
 .chip-bob { animation: m-bob 4.4s ease-in-out infinite; }
 
-/* ===== Маскот «Кодик» ===== */
+
 .mascot { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
 .mascot.is-float { animation: m-bob 3.6s ease-in-out infinite; }
 .mascot[data-mood="happy"] { animation: m-hop .7s ease-out 1; }
@@ -69,27 +62,27 @@ button.bg-portal-600:not(:disabled):hover { background: var(--portal-navy); colo
 @keyframes m-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(3px); } }
 @keyframes chip-pop { 0% { transform: scale(.4); } 60% { transform: scale(1.35); } 100% { transform: scale(1); } }
 
-/* ===== Лампочки прогресса ===== */
+
 .lamp { width: 26px; height: 26px; color: #cbd5e1; transition: color .25s, filter .25s; }
 .lamp.now { color: #5b9bd5; }
 .lamp.ok { color: #3fae49; filter: drop-shadow(0 0 7px rgba(63,174,73,.8)); animation: chip-pop .45s ease-out; }
 .lamp.bad { color: #8aa4bd; filter: none; animation: chip-pop .45s ease-out; }
 
-/* ===== Спрятанные Кодики ===== */
+
 #quizEggs { position: absolute; inset: 0; pointer-events: none; z-index: 40; overflow: visible; }
 .midori-egg { pointer-events: auto; position: absolute; width: 72px; height: 72px; object-fit: contain; cursor: pointer; opacity: .5; transition: opacity .2s, transform .2s; touch-action: manipulation; filter: drop-shadow(0 2px 7px rgba(13,95,196,.5)); }
 .midori-egg:hover { opacity: 1; transform: scale(1.18); }
 .midori-egg:focus-visible { opacity: 1; outline: 2px solid var(--portal-blue); border-radius: 50%; }
 .midori-egg.found { opacity: 0; pointer-events: none; transform: scale(1.5); }
 
-/* ===== Новые типы заданий (зелёный/красный — только как «верно/неверно») ===== */
+
 .pwd-card, .sort-card { cursor: pointer; user-select: none; transition: .15s; }
 .pwd-card.mark-good { outline: 2px solid #10b981; background: #ecfdf5; }
 .pwd-card.mark-bad { outline: 2px solid #f43f5e; background: #fff1f2; }
 .sort-card.selected { outline: 2px solid var(--portal-blue); background: var(--portal-light); }
 .sort-card.used { opacity: .35; pointer-events: none; }
 
-/* ===== Футер: отменить градиентную подложку из Tailwind ===== */
+
 footer { background-image: none !important; background-color: #ffffff !important; border-top: 1px solid var(--portal-border) !important; }
 
 @media (prefers-reduced-motion: reduce) {
